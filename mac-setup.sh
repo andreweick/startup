@@ -1,0 +1,193 @@
+#!/usr/bin/env bash
+
+brews=(
+  ack
+  archey
+  bash
+  brew-cask
+  coreutils
+  findutils
+  git
+  git-extras
+  python
+  tree
+  wget
+  zsh
+  ack
+  graphicsmagick
+  hub
+  imagemagick
+  curl
+  exiftool
+  s3cmd
+  ffmpeg
+  rbenv
+  ruby0build
+)
+
+casks=(
+  atom
+  alfred
+  textexpander
+  kaleidoscope
+  dropbox
+  firefox
+  google-chrome
+  iterm2
+  qlcolorcode
+  qlmarkdown
+  quicklook-json
+  quicklook-csv
+  java
+  superduper
+  keyboard-maestro
+  bartender
+  fluid
+  marked
+  path-finder
+)
+
+pips=(
+  Glances
+  pythonpy
+)
+
+gems=(
+  Galileo
+  git-up
+  bundle
+)
+
+npms=(
+  coffee-script
+  fenix-cli
+  gitjk
+)
+
+
+git_configs=(
+  "rerere.enabled true"
+  "branch.autosetuprebase always"
+  "user.email maeick@missionfocus.com"
+)
+
+apms=(
+  atom-beautify
+  autocomplete-plus
+  circle-ci
+  markdown-preview
+  minimap
+  language-coffee-script
+  language-gfm
+  language-html
+  language-java
+  language-javascript
+  language-json
+  language-python
+  language-scala
+  language-shellscript
+  language-xml
+  language-yaml
+)
+
+fonts=(
+  font-source-code-pro
+)
+
+######################################## End of app list ########################################
+set +e
+
+if test ! $(which brew); then
+  echo "Installing Xcode ..."
+  xcode-select --install
+
+  echo "Installing Homebrew ..."
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+else
+  echo "Updating Homebrew ..."
+  brew update
+  brew upgrade brew-cask
+fi
+brew doctor
+brew tap homebrew/dupes
+
+fails=()
+
+function print_red {
+  red='\x1B[0;31m'
+  NC='\x1B[0m' # no color
+  echo -e "${red}$1${NC}"
+}
+
+function install {
+  cmd=$1
+  shift
+  for pkg in $@;
+  do
+    exec="$cmd $pkg"
+    echo "Executing: $exec"
+    if $exec ; then
+      echo "Installed $pkg"
+    else
+      fails+=($pkg)
+      print_red "Failed to execute: $exec"
+    fi
+  done
+}
+
+function proceed_prompt {
+  read -p "Proceed with installation? " -n 1 -r
+  if [[ $REPLY =~ ^[Nn]$ ]]
+  then
+    exit 1
+  fi
+}
+
+brew info ${brews[@]}
+proceed_prompt
+install 'brew install' ${brews[@]}
+
+echo "Tapping casks ..."
+brew tap caskroom/fonts
+brew tap caskroom/versions
+
+brew cask info ${casks[@]}
+proceed_prompt
+install 'brew cask install --appdir="/Applications"' ${casks[@]}
+
+# TODO: add info part of install
+install 'pip install' ${pips[@]}
+install 'gem install' ${gems[@]}
+install 'npm install -g' ${npms[@]}
+install 'apm install' ${apms[@]}
+install 'brew cask install' ${fonts[@]}
+
+echo "Upgrading bash ..."
+sudo bash -c "echo $(brew --prefix)/bin/bash >> /private/etc/shells"
+
+echo "Setting up zsh ..."
+curl -L http://install.ohmyz.sh | sh
+chsh -s $(which zsh)
+# TODO: Auto-set theme to "fino-time" in ~/.zshrc (using antigen?)
+curl -sSL https://get.rvm.io | bash -s stable  # required for some zsh-themes
+
+echo "Setting git defaults ..."
+for config in "${git_configs[@]}"
+do
+  git config --global ${config}
+done
+
+echo "Upgrading ..."
+pip install --upgrade setuptools
+pip install --upgrade pip
+gem update --system
+
+echo "Cleaning up ..."
+brew cleanup
+brew cask cleanup
+brew linkapps
+
+for fail in ${fails[@]}
+do
+  echo "Failed to install: $fail"
+done
