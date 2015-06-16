@@ -149,8 +149,6 @@ echo "Tapping casks ..."
 brew tap caskroom/fonts
 brew tap caskroom/versions
 
-brew cask info ${casks[@]}
-proceed_prompt
 install 'brew cask install --appdir="/Applications"' ${casks[@]}
 
 # TODO: add info part of install
