@@ -13,7 +13,6 @@ brews=(
   tree
   wget
   zsh
-  ack
   graphicsmagick
   hub
   imagemagick
@@ -22,7 +21,6 @@ brews=(
   s3cmd
   ffmpeg
   rbenv
-  ruby0build
 )
 
 casks=(
@@ -38,7 +36,7 @@ casks=(
   qlmarkdown
   quicklook-json
   quicklook-csv
-  java
+  minecraft
   superduper
   keyboard-maestro
   bartender
@@ -156,20 +154,20 @@ proceed_prompt
 install 'brew cask install --appdir="/Applications"' ${casks[@]}
 
 # TODO: add info part of install
-install 'pip install' ${pips[@]}
-install 'gem install' ${gems[@]}
-install 'npm install -g' ${npms[@]}
-install 'apm install' ${apms[@]}
-install 'brew cask install' ${fonts[@]}
-
-echo "Upgrading bash ..."
-sudo bash -c "echo $(brew --prefix)/bin/bash >> /private/etc/shells"
-
-echo "Setting up zsh ..."
-curl -L http://install.ohmyz.sh | sh
-chsh -s $(which zsh)
-# TODO: Auto-set theme to "fino-time" in ~/.zshrc (using antigen?)
-curl -sSL https://get.rvm.io | bash -s stable  # required for some zsh-themes
+# install 'pip install' ${pips[@]}
+# install 'gem install' ${gems[@]}
+# install 'npm install -g' ${npms[@]}
+# install 'apm install' ${apms[@]}
+# install 'brew cask install' ${fonts[@]}
+# 
+# echo "Upgrading bash ..."
+# sudo bash -c "echo $(brew --prefix)/bin/bash >> /private/etc/shells"
+# 
+# echo "Setting up zsh ..."
+# curl -L http://install.ohmyz.sh | sh
+# chsh -s $(which zsh)
+# # TODO: Auto-set theme to "fino-time" in ~/.zshrc (using antigen?)
+# curl -sSL https://get.rvm.io | bash -s stable  # required for some zsh-themes
 
 echo "Setting git defaults ..."
 for config in "${git_configs[@]}"
@@ -177,10 +175,10 @@ do
   git config --global ${config}
 done
 
-echo "Upgrading ..."
-pip install --upgrade setuptools
-pip install --upgrade pip
-gem update --system
+# echo "Upgrading ..."
+# pip install --upgrade setuptools
+# pip install --upgrade pip
+# gem update --system
 
 echo "Cleaning up ..."
 brew cleanup
