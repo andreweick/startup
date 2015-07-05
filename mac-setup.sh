@@ -3,8 +3,7 @@
 brews=(
   ack
   archey
-  bash
-  brew-cask
+  caskroom/cask/brew-cask
   coreutils
   findutils
   git
