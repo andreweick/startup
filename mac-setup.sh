@@ -3,7 +3,6 @@
 brews=(
   ack
   archey
-  caskroom/cask/brew-cask
   coreutils
   findutils
   git
@@ -145,6 +144,7 @@ proceed_prompt
 install 'brew install' ${brews[@]}
 
 echo "Tapping casks ..."
+brew install caskroom/cask/brew-cask
 brew tap caskroom/fonts
 brew tap caskroom/versions
 
