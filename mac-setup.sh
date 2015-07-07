@@ -12,6 +12,7 @@ brews=(
   s3cmd
   ffmpeg
   rbenv
+  cowsay
 )
 
 casks=(
