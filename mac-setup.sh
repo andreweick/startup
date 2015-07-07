@@ -2,17 +2,10 @@
 
 brews=(
   ack
-  archey
   coreutils
-  findutils
-  git
-  git-extras
-  python
   tree
   wget
-  zsh
   graphicsmagick
-  hub
   imagemagick
   curl
   exiftool
