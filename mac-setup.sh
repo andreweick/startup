@@ -5,13 +5,7 @@ brews=(
   coreutils
   tree
   wget
-  graphicsmagick
-  imagemagick
   curl
-  exiftool
-  s3cmd
-  ffmpeg
-  rbenv
   cowsay
 )
 
