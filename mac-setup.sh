@@ -24,11 +24,7 @@ casks=(
   quicklook-csv
   minecraft
   superduper
-  keyboard-maestro
-  bartender
   fluid
-  marked
-  path-finder
 )
 
 pips=(
